@@ -1,0 +1,16 @@
+# 운영체제 파일
+.DS_Store
+Thumbs.db
+
+# 에디터 설정
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# 임시 파일
+*.log
+*.tmp
+
+# ref 폴더 (참고 자료)
+ref/

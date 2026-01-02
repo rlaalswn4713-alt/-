@@ -1,0 +1,26 @@
+/* ========================================
+   CSS Variables (색상 테마)
+   ======================================== */
+:root {
+  /* 라이트 모드 색상 */
+  --main-color: #10B981;
+  --sub-color: #6EE7B7;
+  --bg-color: #F0FDF4;
+  --text-color: #064E3B;
+  --accent-color: #059669;
+}
+
+/* ========================================
+   기본 스타일
+   ======================================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
