@@ -19,6 +19,71 @@
 </head>
 <body>
 
+  <!-- 헤더 -->
+  <header class="header">
+    <h1 class="header-title">나만의 메모</h1>
+    <button class="menu-btn" id="menuBtn">
+      <span>⋮</span>
+    </button>
+  </header>
+
+  <!-- 더보기 메뉴 (처음엔 숨김) -->
+  <nav class="menu-dropdown" id="menuDropdown">
+    <button class="menu-item" id="exportBtn">메모 내보내기</button>
+    <button class="menu-item" id="importBtn">메모 가져오기</button>
+    <button class="menu-item" id="fontSizeBtn">글자크기</button>
+    <button class="menu-item" id="darkModeBtn">다크모드</button>
+  </nav>
+
+  <!-- 메인 컨테이너 -->
+  <main class="container">
+
+    <!-- 검색 영역 -->
+    <section class="search-section">
+      <input type="text" class="search-input" id="searchInput" placeholder="메모 검색...">
+      <button class="filter-btn" id="filterBtn">전체 메모</button>
+    </section>
+
+    <!-- 메모 입력 영역 -->
+    <section class="memo-input-section">
+      <textarea
+        class="memo-textarea"
+        id="memoTextarea"
+        placeholder="메모를 입력하세요..."
+        rows="10"
+      ></textarea>
+
+      <!-- 액션 버튼들 -->
+      <div class="action-buttons">
+        <button class="action-btn" id="imageBtn" title="이미지 첨부">
+          <span>📷</span>
+          <span class="btn-text">이미지</span>
+        </button>
+        <button class="action-btn" id="newMemoBtn" title="새 메모">
+          <span>📝</span>
+          <span class="btn-text">메모</span>
+        </button>
+        <button class="action-btn" id="importantBtn" title="중요 메모">
+          <span>⭐</span>
+          <span class="btn-text">중요메모</span>
+        </button>
+        <button class="action-btn primary" id="saveBtn" title="저장하기">
+          <span>💾</span>
+          <span class="btn-text">저장하기</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- 저장된 메모 목록 -->
+    <section class="memo-list-section">
+      <h2 class="section-title">저장된 메모</h2>
+      <div class="memo-list" id="memoList">
+        <!-- 메모 목록이 동적으로 추가됩니다 -->
+      </div>
+    </section>
+
+  </main>
+
   <!-- JavaScript -->
   <script src="js/app.js"></script>
   <script src="js/sw-register.js"></script>

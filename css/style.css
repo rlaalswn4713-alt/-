@@ -8,6 +8,11 @@
   --bg-color: #F0FDF4;
   --text-color: #064E3B;
   --accent-color: #059669;
+  --white: #FFFFFF;
+  --gray-100: #F3F4F6;
+  --gray-300: #D1D5DB;
+  --gray-500: #6B7280;
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* ========================================
@@ -23,4 +28,332 @@ body {
   font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;
   background-color: var(--bg-color);
   color: var(--text-color);
+  line-height: 1.6;
+  padding-bottom: 2rem;
+}
+
+/* ========================================
+   헤더
+   ======================================== */
+.header {
+  background-color: var(--main-color);
+  color: var(--white);
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: var(--shadow);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.menu-btn {
+  background: none;
+  border: none;
+  color: var(--white);
+  font-size: 1.8rem;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  line-height: 1;
+}
+
+.menu-btn:hover {
+  opacity: 0.8;
+}
+
+/* ========================================
+   더보기 메뉴
+   ======================================== */
+.menu-dropdown {
+  position: absolute;
+  top: 4rem;
+  right: 1rem;
+  background-color: var(--white);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  display: none;
+  flex-direction: column;
+  min-width: 180px;
+  overflow: hidden;
+  z-index: 200;
+}
+
+.menu-dropdown.active {
+  display: flex;
+}
+
+.menu-item {
+  background: none;
+  border: none;
+  padding: 0.875rem 1.25rem;
+  text-align: left;
+  cursor: pointer;
+  color: var(--text-color);
+  font-size: 1rem;
+  border-bottom: 1px solid var(--gray-100);
+}
+
+.menu-item:last-child {
+  border-bottom: none;
+}
+
+.menu-item:hover {
+  background-color: var(--gray-100);
+}
+
+/* ========================================
+   메인 컨테이너
+   ======================================== */
+.container {
+  max-width: 768px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+/* ========================================
+   검색 영역
+   ======================================== */
+.search-section {
+  margin-bottom: 1.5rem;
+  display: flex;
+  gap: 0.75rem;
+}
+
+.search-input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--sub-color);
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: var(--white);
+  color: var(--text-color);
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--main-color);
+}
+
+.filter-btn {
+  padding: 0.75rem 1rem;
+  background-color: var(--white);
+  border: 2px solid var(--sub-color);
+  border-radius: 8px;
+  cursor: pointer;
+  color: var(--text-color);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.filter-btn:hover {
+  background-color: var(--sub-color);
+}
+
+.filter-btn.active {
+  background-color: var(--main-color);
+  color: var(--white);
+  border-color: var(--main-color);
+}
+
+/* ========================================
+   메모 입력 영역
+   ======================================== */
+.memo-input-section {
+  background-color: var(--white);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+  margin-bottom: 2rem;
+}
+
+.memo-textarea {
+  width: 100%;
+  min-height: 200px;
+  padding: 1rem;
+  border: 2px solid var(--gray-300);
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: inherit;
+  resize: vertical;
+  color: var(--text-color);
+}
+
+.memo-textarea:focus {
+  outline: none;
+  border-color: var(--main-color);
+}
+
+/* ========================================
+   액션 버튼들
+   ======================================== */
+.action-buttons {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.action-btn {
+  flex: 1;
+  min-width: 80px;
+  padding: 0.875rem 1rem;
+  background-color: var(--gray-100);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  transition: all 0.2s;
+}
+
+.action-btn span:first-child {
+  font-size: 1.5rem;
+}
+
+.action-btn:hover {
+  background-color: var(--gray-300);
+  transform: translateY(-2px);
+}
+
+.action-btn.primary {
+  background-color: var(--main-color);
+  color: var(--white);
+  font-weight: bold;
+}
+
+.action-btn.primary:hover {
+  background-color: var(--accent-color);
+}
+
+.action-btn.active {
+  background-color: var(--sub-color);
+}
+
+/* ========================================
+   저장된 메모 목록
+   ======================================== */
+.memo-list-section {
+  margin-top: 2rem;
+}
+
+.section-title {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  color: var(--text-color);
+}
+
+.memo-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.memo-item {
+  background-color: var(--white);
+  border-radius: 8px;
+  padding: 1.25rem;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  transition: all 0.2s;
+  border-left: 4px solid var(--main-color);
+}
+
+.memo-item:hover {
+  transform: translateX(4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.memo-item.important {
+  border-left-color: #F59E0B;
+  background-color: #FFFBEB;
+}
+
+.memo-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.memo-date {
+  font-size: 0.875rem;
+  color: var(--gray-500);
+}
+
+.memo-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.memo-star {
+  font-size: 1rem;
+}
+
+.delete-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.25rem;
+  opacity: 0.6;
+  transition: all 0.2s;
+}
+
+.delete-btn:hover {
+  opacity: 1;
+  transform: scale(1.2);
+}
+
+.memo-content {
+  color: var(--text-color);
+  line-height: 1.6;
+  word-break: break-word;
+}
+
+.memo-empty {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--gray-500);
+  font-size: 1rem;
+}
+
+/* ========================================
+   반응형 디자인
+   ======================================== */
+@media (max-width: 480px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .header-title {
+    font-size: 1.25rem;
+  }
+
+  .action-buttons {
+    gap: 0.5rem;
+  }
+
+  .action-btn {
+    min-width: 70px;
+    padding: 0.75rem 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  .action-btn span:first-child {
+    font-size: 1.25rem;
+  }
+
+  .btn-text {
+    font-size: 0.75rem;
+  }
 }
