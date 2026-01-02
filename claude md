@@ -132,15 +132,15 @@
 - [x] `js/sw-register.js` 생성 (Service Worker 등록)
 
 ### 오프라인 동작 테스트
-- [] 브라우저에서 앱 실행
-- [] 개발자 도구 → Application → Service Workers 확인
-- [] Service Worker "activated and is running" 확인
-- [] 오프라인 모드로 전환 (Network 탭 → Offline 체크)
-- [] 페이지 새로고침 후 앱 정상 작동 확인
-- [] 오프라인에서 메모 추가 테스트
-- [] 오프라인에서 메모 수정 테스트
-- [] 오프라인에서 메모 삭제 테스트
-- [] 온라인 복구 후 데이터 유지 확인
+- [x] 브라우저에서 앱 실행
+- [x] 개발자 도구 → Application → Service Workers 확인
+- [x] Service Worker "activated and is running" 확인
+- [x] 오프라인 모드로 전환 (Network 탭 → Offline 체크)
+- [x] 페이지 새로고침 후 앱 정상 작동 확인
+- [x] 오프라인에서 메모 추가 테스트
+- [x] 오프라인에서 메모 수정 테스트
+- [x] 오프라인에서 메모 삭제 테스트
+- [x] 온라인 복구 후 데이터 유지 확인
 
 
 ## 4.️ 백업 관리 기능
