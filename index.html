@@ -87,6 +87,38 @@
 
   </main>
 
+  <!-- 상세보기 모달 -->
+  <div class="detail-modal" id="detailModal">
+    <div class="detail-content">
+      <div class="detail-header">
+        <h2 class="detail-title">메모 상세보기</h2>
+        <button class="close-btn" id="closeDetailBtn">✕</button>
+      </div>
+      <div class="detail-body">
+        <div class="detail-date" id="detailDate"></div>
+        <div class="detail-text" id="detailText"></div>
+      </div>
+      <div class="detail-actions">
+        <button class="detail-btn edit" id="detailEditBtn">
+          <span>✏️</span>
+          <span>수정</span>
+        </button>
+        <button class="detail-btn delete" id="detailDeleteBtn">
+          <span>🗑️</span>
+          <span>삭제</span>
+        </button>
+        <button class="detail-btn share" id="detailShareBtn">
+          <span>📤</span>
+          <span>공유</span>
+        </button>
+        <button class="detail-btn copy" id="detailCopyBtn">
+          <span>📋</span>
+          <span>복사</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- JavaScript -->
   <script src="js/app.js"></script>
   <script src="js/sw-register.js"></script>

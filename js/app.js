@@ -15,10 +15,19 @@ const filterBtn = document.getElementById('filterBtn');
 const exportBtn = document.getElementById('exportBtn');
 const importBtn = document.getElementById('importBtn');
 const importFileInput = document.getElementById('importFileInput');
+const detailModal = document.getElementById('detailModal');
+const closeDetailBtn = document.getElementById('closeDetailBtn');
+const detailDate = document.getElementById('detailDate');
+const detailText = document.getElementById('detailText');
+const detailEditBtn = document.getElementById('detailEditBtn');
+const detailDeleteBtn = document.getElementById('detailDeleteBtn');
+const detailShareBtn = document.getElementById('detailShareBtn');
+const detailCopyBtn = document.getElementById('detailCopyBtn');
 
 // 전역 변수
 let memos = []; // 메모 배열
 let currentMemoId = null; // 현재 수정 중인 메모 ID
+let currentDetailMemoId = null; // 현재 상세보기 중인 메모 ID
 let isImportantMode = false; // 중요 메모 모드 여부
 let isFilteringImportant = false; // 중요 메모만 보기 여부
 
@@ -210,33 +219,17 @@ function renderMemoList() {
     <div class="memo-item ${memo.isImportant ? 'important' : ''}" data-id="${memo.id}">
       <div class="memo-header">
         <span class="memo-date">${formatDate(memo.date)}</span>
-        <div class="memo-actions">
-          ${memo.isImportant ? '<span class="memo-star">⭐</span>' : ''}
-          <button class="delete-btn" data-id="${memo.id}" title="삭제">🗑️</button>
-        </div>
+        ${memo.isImportant ? '<span class="memo-star">⭐</span>' : ''}
       </div>
       <div class="memo-content">${escapeHtml(memo.content)}</div>
     </div>
   `).join('');
 
-  // 메모 클릭 이벤트 등록
+  // 메모 클릭 이벤트 등록 (상세보기 열기)
   document.querySelectorAll('.memo-item').forEach(item => {
-    item.addEventListener('click', (e) => {
-      // 삭제 버튼 클릭 시에는 수정 모드로 가지 않음
-      if (e.target.classList.contains('delete-btn')) {
-        return;
-      }
+    item.addEventListener('click', () => {
       const id = parseInt(item.dataset.id);
-      loadMemoForEdit(id);
-    });
-  });
-
-  // 삭제 버튼 이벤트 등록
-  document.querySelectorAll('.delete-btn').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const id = parseInt(btn.dataset.id);
-      deleteMemo(id);
+      openDetailModal(id);
     });
   });
 }
@@ -449,3 +442,166 @@ function importMemos(event) {
 
   reader.readAsText(file);
 }
+
+// ========================================
+// 상세보기 모달 열기
+// ========================================
+function openDetailModal(id) {
+  const memo = memos.find(m => m.id === id);
+  if (!memo) return;
+
+  currentDetailMemoId = id;
+
+  // 날짜 표시
+  detailDate.innerHTML = `
+    <span>📅</span>
+    <span>${formatDate(memo.date)}</span>
+    ${memo.isImportant ? '<span>⭐ 중요 메모</span>' : ''}
+  `;
+
+  // 내용 표시
+  detailText.textContent = memo.content;
+
+  // 모달 열기
+  detailModal.classList.add('active');
+  document.body.style.overflow = 'hidden'; // 배경 스크롤 방지
+}
+
+// ========================================
+// 상세보기 모달 닫기
+// ========================================
+function closeDetailModal() {
+  detailModal.classList.remove('active');
+  document.body.style.overflow = ''; // 배경 스크롤 복원
+  currentDetailMemoId = null;
+}
+
+// ========================================
+// 상세보기에서 수정
+// ========================================
+function editFromDetail() {
+  if (!currentDetailMemoId) return;
+
+  closeDetailModal();
+  loadMemoForEdit(currentDetailMemoId);
+}
+
+// ========================================
+// 상세보기에서 삭제
+// ========================================
+function deleteFromDetail() {
+  if (!currentDetailMemoId) return;
+
+  deleteMemo(currentDetailMemoId);
+  closeDetailModal();
+}
+
+// ========================================
+// 메모 공유 (Web Share API)
+// ========================================
+function shareMemo() {
+  if (!currentDetailMemoId) return;
+
+  const memo = memos.find(m => m.id === currentDetailMemoId);
+  if (!memo) return;
+
+  // Web Share API 지원 확인
+  if (navigator.share) {
+    navigator.share({
+      title: '나만의 메모장',
+      text: memo.content
+    })
+    .then(() => {
+      console.log('메모 공유 성공');
+    })
+    .catch((error) => {
+      console.error('메모 공유 실패:', error);
+      // 공유 실패 시 클립보드 복사로 대체
+      copyMemo();
+    });
+  } else {
+    // Web Share API 미지원 시 클립보드 복사
+    alert('이 브라우저는 공유 기능을 지원하지 않습니다.\n클립보드에 복사합니다.');
+    copyMemo();
+  }
+}
+
+// ========================================
+// 메모 복사 (Clipboard API)
+// ========================================
+function copyMemo() {
+  if (!currentDetailMemoId) return;
+
+  const memo = memos.find(m => m.id === currentDetailMemoId);
+  if (!memo) return;
+
+  // Clipboard API 사용
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(memo.content)
+      .then(() => {
+        alert('메모가 클립보드에 복사되었습니다.');
+      })
+      .catch((error) => {
+        console.error('복사 실패:', error);
+        // fallback: textarea 사용
+        copyMemoFallback(memo.content);
+      });
+  } else {
+    // fallback: textarea 사용
+    copyMemoFallback(memo.content);
+  }
+}
+
+// ========================================
+// 메모 복사 fallback (구형 브라우저)
+// ========================================
+function copyMemoFallback(text) {
+  const textarea = document.createElement('textarea');
+  textarea.value = text;
+  textarea.style.position = 'fixed';
+  textarea.style.opacity = '0';
+  document.body.appendChild(textarea);
+  textarea.select();
+
+  try {
+    document.execCommand('copy');
+    alert('메모가 클립보드에 복사되었습니다.');
+  } catch (error) {
+    console.error('복사 실패:', error);
+    alert('복사에 실패했습니다.');
+  }
+
+  document.body.removeChild(textarea);
+}
+
+// ========================================
+// 상세보기 이벤트 리스너
+// ========================================
+// 닫기 버튼
+closeDetailBtn.addEventListener('click', closeDetailModal);
+
+// 모달 배경 클릭 시 닫기
+detailModal.addEventListener('click', (e) => {
+  if (e.target === detailModal) {
+    closeDetailModal();
+  }
+});
+
+// ESC 키로 닫기
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && detailModal.classList.contains('active')) {
+    closeDetailModal();
+  }
+});
+
+// 수정 버튼
+detailEditBtn.addEventListener('click', editFromDetail);
+
+// 삭제 버튼
+detailDeleteBtn.addEventListener('click', deleteFromDetail);
+
+// 공유 버튼
+detailShareBtn.addEventListener('click', shareMemo);
+
+// 복사 버튼
+detailCopyBtn.addEventListener('click', copyMemo);

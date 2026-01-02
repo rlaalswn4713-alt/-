@@ -318,6 +318,10 @@ body {
   color: var(--text-color);
   line-height: 1.6;
   word-break: break-word;
+  /* 한 줄로 제한 */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .memo-empty {
@@ -325,6 +329,140 @@ body {
   padding: 3rem 1rem;
   color: var(--gray-500);
   font-size: 1rem;
+}
+
+/* ========================================
+   상세보기 모달
+   ======================================== */
+.detail-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  overflow-y: auto;
+}
+
+.detail-modal.active {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 2rem 1rem;
+}
+
+.detail-content {
+  background-color: var(--white);
+  border-radius: 12px;
+  max-width: 600px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  margin: auto;
+}
+
+.detail-header {
+  background-color: var(--main-color);
+  color: var(--white);
+  padding: 1.5rem;
+  border-radius: 12px 12px 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.detail-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: var(--white);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  line-height: 1;
+}
+
+.close-btn:hover {
+  opacity: 0.8;
+}
+
+.detail-body {
+  padding: 1.5rem;
+}
+
+.detail-date {
+  color: var(--gray-500);
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.detail-text {
+  color: var(--text-color);
+  font-size: 1rem;
+  line-height: 1.8;
+  white-space: pre-wrap;
+  word-break: break-word;
+  min-height: 100px;
+  margin-bottom: 1.5rem;
+}
+
+.detail-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  padding: 1rem 1.5rem 1.5rem;
+  border-top: 1px solid var(--gray-100);
+}
+
+.detail-btn {
+  flex: 1;
+  min-width: 100px;
+  padding: 0.875rem 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.2s;
+}
+
+.detail-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.detail-btn.edit {
+  background-color: var(--main-color);
+  color: var(--white);
+}
+
+.detail-btn.delete {
+  background-color: #EF4444;
+  color: var(--white);
+}
+
+.detail-btn.share {
+  background-color: var(--sub-color);
+  color: var(--text-color);
+}
+
+.detail-btn.copy {
+  background-color: var(--gray-100);
+  color: var(--text-color);
 }
 
 /* ========================================
