@@ -13,6 +13,39 @@
   --gray-300: #D1D5DB;
   --gray-500: #6B7280;
   --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+  /* 글자크기 기본값 */
+  --font-size-base: 16px;
+  --font-size-small: 14px;
+  --font-size-large: 18px;
+}
+
+/* 다크 모드 색상 */
+body.dark-mode {
+  --main-color: #059669;
+  --sub-color: #34D399;
+  --bg-color: #1F2937;
+  --text-color: #F3F4F6;
+  --accent-color: #10B981;
+  --white: #111827;
+  --gray-100: #374151;
+  --gray-300: #4B5563;
+  --gray-500: #9CA3AF;
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+/* 글자크기 - 작게 */
+body.font-small {
+  --font-size-base: 14px;
+  --font-size-small: 12px;
+  --font-size-large: 16px;
+}
+
+/* 글자크기 - 크게 */
+body.font-large {
+  --font-size-base: 18px;
+  --font-size-small: 16px;
+  --font-size-large: 20px;
 }
 
 /* ========================================
@@ -30,6 +63,8 @@ body {
   color: var(--text-color);
   line-height: 1.6;
   padding-bottom: 2rem;
+  font-size: var(--font-size-base);
+  transition: background-color 0.3s, color 0.3s;
 }
 
 /* ========================================
@@ -80,12 +115,17 @@ body {
   display: none;
   flex-direction: column;
   min-width: 180px;
-  overflow: hidden;
+  overflow: visible;
   z-index: 200;
 }
 
 .menu-dropdown.active {
   display: flex;
+}
+
+.menu-item-wrapper {
+  position: relative;
+  border-bottom: 1px solid var(--gray-100);
 }
 
 .menu-item {
@@ -97,6 +137,14 @@ body {
   color: var(--text-color);
   font-size: 1rem;
   border-bottom: 1px solid var(--gray-100);
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.menu-item-wrapper .menu-item {
+  border-bottom: none;
 }
 
 .menu-item:last-child {
@@ -105,6 +153,47 @@ body {
 
 .menu-item:hover {
   background-color: var(--gray-100);
+}
+
+.menu-item .arrow {
+  font-size: 0.75rem;
+  transition: transform 0.2s;
+}
+
+.menu-item-wrapper.active .arrow {
+  transform: rotate(90deg);
+}
+
+/* 서브메뉴 */
+.submenu {
+  display: none;
+  flex-direction: column;
+  background-color: var(--gray-100);
+  padding: 0.25rem 0;
+}
+
+.submenu.active {
+  display: flex;
+}
+
+.submenu-item {
+  background: none;
+  border: none;
+  padding: 0.75rem 1.25rem 0.75rem 2rem;
+  text-align: left;
+  cursor: pointer;
+  color: var(--text-color);
+  font-size: 0.95rem;
+  transition: background-color 0.2s;
+}
+
+.submenu-item:hover {
+  background-color: var(--gray-300);
+}
+
+.submenu-item.active {
+  background-color: var(--sub-color);
+  font-weight: bold;
 }
 
 /* ========================================

@@ -15,6 +15,9 @@ const filterBtn = document.getElementById('filterBtn');
 const exportBtn = document.getElementById('exportBtn');
 const importBtn = document.getElementById('importBtn');
 const importFileInput = document.getElementById('importFileInput');
+const fontSizeBtn = document.getElementById('fontSizeBtn');
+const fontSizeSubmenu = document.getElementById('fontSizeSubmenu');
+const darkModeBtn = document.getElementById('darkModeBtn');
 const detailModal = document.getElementById('detailModal');
 const closeDetailBtn = document.getElementById('closeDetailBtn');
 const detailDate = document.getElementById('detailDate');
@@ -45,6 +48,9 @@ document.addEventListener('DOMContentLoaded', () => {
 function initApp() {
   // 메뉴 토글 이벤트
   setupMenuToggle();
+
+  // 저장된 설정 불러오기
+  loadSettings();
 
   // 저장된 메모 불러오기
   loadMemos();
@@ -85,6 +91,28 @@ function setupEventListeners() {
 
   // 파일 선택 시
   importFileInput.addEventListener('change', importMemos);
+
+  // 글자크기 버튼 (서브메뉴 토글)
+  fontSizeBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    fontSizeBtn.parentElement.classList.toggle('active');
+    fontSizeSubmenu.classList.toggle('active');
+  });
+
+  // 글자크기 선택
+  document.querySelectorAll('.submenu-item').forEach(item => {
+    item.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const size = item.dataset.size;
+      setFontSize(size);
+      menuDropdown.classList.remove('active');
+      fontSizeBtn.parentElement.classList.remove('active');
+      fontSizeSubmenu.classList.remove('active');
+    });
+  });
+
+  // 다크모드 토글 버튼
+  darkModeBtn.addEventListener('click', toggleDarkMode);
 }
 
 // ========================================
@@ -605,3 +633,70 @@ detailShareBtn.addEventListener('click', shareMemo);
 
 // 복사 버튼
 detailCopyBtn.addEventListener('click', copyMemo);
+
+// ========================================
+// 설정 불러오기
+// ========================================
+function loadSettings() {
+  // 글자크기 설정 불러오기
+  const savedFontSize = localStorage.getItem('fontSize') || 'medium';
+  setFontSize(savedFontSize);
+
+  // 다크모드 설정 불러오기
+  const savedDarkMode = localStorage.getItem('darkMode') === 'true';
+  if (savedDarkMode) {
+    document.body.classList.add('dark-mode');
+    updateDarkModeButton();
+  }
+}
+
+// ========================================
+// 글자크기 변경
+// ========================================
+function setFontSize(size) {
+  // 기존 클래스 제거
+  document.body.classList.remove('font-small', 'font-large');
+
+  // 새 클래스 추가
+  if (size === 'small') {
+    document.body.classList.add('font-small');
+  } else if (size === 'large') {
+    document.body.classList.add('font-large');
+  }
+
+  // LocalStorage에 저장
+  localStorage.setItem('fontSize', size);
+
+  // 서브메뉴 항목 활성화 표시
+  document.querySelectorAll('.submenu-item').forEach(item => {
+    item.classList.remove('active');
+    if (item.dataset.size === size) {
+      item.classList.add('active');
+    }
+  });
+}
+
+// ========================================
+// 다크모드 토글
+// ========================================
+function toggleDarkMode() {
+  document.body.classList.toggle('dark-mode');
+  const isDarkMode = document.body.classList.contains('dark-mode');
+
+  // LocalStorage에 저장
+  localStorage.setItem('darkMode', isDarkMode);
+
+  // 버튼 텍스트 업데이트
+  updateDarkModeButton();
+
+  // 메뉴 닫기
+  menuDropdown.classList.remove('active');
+}
+
+// ========================================
+// 다크모드 버튼 텍스트 업데이트
+// ========================================
+function updateDarkModeButton() {
+  const isDarkMode = document.body.classList.contains('dark-mode');
+  darkModeBtn.textContent = isDarkMode ? '라이트모드' : '다크모드';
+}

@@ -31,7 +31,17 @@
   <nav class="menu-dropdown" id="menuDropdown">
     <button class="menu-item" id="exportBtn">메모 내보내기</button>
     <button class="menu-item" id="importBtn">메모 가져오기</button>
-    <button class="menu-item" id="fontSizeBtn">글자크기</button>
+    <div class="menu-item-wrapper">
+      <button class="menu-item" id="fontSizeBtn">
+        <span>글자크기</span>
+        <span class="arrow">▶</span>
+      </button>
+      <div class="submenu" id="fontSizeSubmenu">
+        <button class="submenu-item" data-size="small">작게</button>
+        <button class="submenu-item" data-size="medium">보통</button>
+        <button class="submenu-item" data-size="large">크게</button>
+      </div>
+    </div>
     <button class="menu-item" id="darkModeBtn">다크모드</button>
   </nav>
 
