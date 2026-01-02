@@ -12,6 +12,9 @@ const newMemoBtn = document.getElementById('newMemoBtn');
 const importantBtn = document.getElementById('importantBtn');
 const searchInput = document.getElementById('searchInput');
 const filterBtn = document.getElementById('filterBtn');
+const exportBtn = document.getElementById('exportBtn');
+const importBtn = document.getElementById('importBtn');
+const importFileInput = document.getElementById('importFileInput');
 
 // 전역 변수
 let memos = []; // 메모 배열
@@ -62,6 +65,17 @@ function setupEventListeners() {
 
   // 필터 버튼
   filterBtn.addEventListener('click', toggleFilter);
+
+  // 메모 내보내기 버튼
+  exportBtn.addEventListener('click', exportMemos);
+
+  // 메모 가져오기 버튼
+  importBtn.addEventListener('click', () => {
+    importFileInput.click();
+  });
+
+  // 파일 선택 시
+  importFileInput.addEventListener('change', importMemos);
 }
 
 // ========================================
@@ -314,4 +328,124 @@ function setupMenuToggle() {
       menuDropdown.classList.remove('active');
     }
   });
+}
+
+// ========================================
+// 메모 내보내기 (JSON 다운로드)
+// ========================================
+function exportMemos() {
+  if (memos.length === 0) {
+    alert('내보낼 메모가 없습니다.');
+    return;
+  }
+
+  // 메뉴 닫기
+  menuDropdown.classList.remove('active');
+
+  // JSON 데이터 생성
+  const dataStr = JSON.stringify(memos, null, 2);
+  const dataBlob = new Blob([dataStr], { type: 'application/json' });
+
+  // 파일명 생성 (날짜 포함)
+  const date = new Date();
+  const fileName = `메모백업_${date.getFullYear()}${String(date.getMonth() + 1).padStart(2, '0')}${String(date.getDate()).padStart(2, '0')}_${String(date.getHours()).padStart(2, '0')}${String(date.getMinutes()).padStart(2, '0')}.json`;
+
+  // 다운로드 링크 생성
+  const downloadLink = document.createElement('a');
+  downloadLink.href = URL.createObjectURL(dataBlob);
+  downloadLink.download = fileName;
+
+  // 자동 클릭하여 다운로드
+  document.body.appendChild(downloadLink);
+  downloadLink.click();
+  document.body.removeChild(downloadLink);
+
+  // URL 객체 해제
+  URL.revokeObjectURL(downloadLink.href);
+
+  alert(`메모가 성공적으로 내보내졌습니다.\n(${memos.length}개의 메모)`);
+}
+
+// ========================================
+// 메모 가져오기 (JSON 업로드)
+// ========================================
+function importMemos(event) {
+  const file = event.target.files[0];
+
+  if (!file) {
+    return;
+  }
+
+  // 메뉴 닫기
+  menuDropdown.classList.remove('active');
+
+  // 파일 확장자 검증
+  if (!file.name.endsWith('.json')) {
+    alert('JSON 파일만 가져올 수 있습니다.');
+    importFileInput.value = ''; // 파일 입력 초기화
+    return;
+  }
+
+  // 파일 읽기
+  const reader = new FileReader();
+
+  reader.onload = (e) => {
+    try {
+      // JSON 파싱
+      const importedMemos = JSON.parse(e.target.result);
+
+      // 배열인지 확인
+      if (!Array.isArray(importedMemos)) {
+        throw new Error('올바른 메모 파일 형식이 아닙니다.');
+      }
+
+      // 메모 데이터 유효성 검증
+      const isValid = importedMemos.every(memo =>
+        memo.id &&
+        memo.content &&
+        memo.date &&
+        typeof memo.isImportant === 'boolean'
+      );
+
+      if (!isValid) {
+        throw new Error('메모 데이터가 올바르지 않습니다.');
+      }
+
+      // 확인 메시지
+      const confirmMsg = `${importedMemos.length}개의 메모를 가져오시겠습니까?\n기존 메모에 추가됩니다.`;
+      if (!confirm(confirmMsg)) {
+        importFileInput.value = '';
+        return;
+      }
+
+      // 기존 메모와 병합 (중복 ID 처리)
+      const existingIds = new Set(memos.map(m => m.id));
+      const newMemos = importedMemos.filter(memo => !existingIds.has(memo.id));
+
+      // 새 메모 추가
+      memos = [...newMemos, ...memos];
+
+      // LocalStorage에 저장
+      saveMemos();
+
+      // 메모 목록 렌더링
+      renderMemoList();
+
+      alert(`${newMemos.length}개의 메모를 성공적으로 가져왔습니다.`);
+
+    } catch (error) {
+      console.error('메모 가져오기 실패:', error);
+      alert('메모를 가져오는 데 실패했습니다.\n' + error.message);
+    } finally {
+      // 파일 입력 초기화
+      importFileInput.value = '';
+    }
+  };
+
+  reader.onerror = () => {
+    alert('파일을 읽는 데 실패했습니다.');
+    importFileInput.value = '';
+  };
+
+  reader.readAsText(file);
 }
